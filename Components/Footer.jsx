@@ -1,5 +1,6 @@
 import { Box, Typography, Link, IconButton } from '@mui/material';
 import {Facebook, LinkedIn, Instagram} from '@mui/icons-material';
+import PropTypes from "prop-types";
 
 const Footer = ({ setTermsOpen, setPrivacyOpen }) => {
     return (
@@ -41,7 +42,7 @@ const Footer = ({ setTermsOpen, setPrivacyOpen }) => {
                 {/* Right-aligned Links */}
                 <Box sx={{ display: 'flex', gap: 2 }}>
                     <Link href="#" onClick={() => setTermsOpen(true)} color="inherit" underline="hover" sx={{ fontSize: 14 }}>
-                        Terms of Serice
+                        Terms of Service
                     </Link>
                     <Link href="#" onClick={() => setPrivacyOpen(true)} color="inherit" underline="hover" sx={{ fontSize: 14 }}>
                         Privacy Policy
@@ -50,6 +51,11 @@ const Footer = ({ setTermsOpen, setPrivacyOpen }) => {
             </Box>
         </Box>
     );
+};
+
+Footer.propTypes = {
+  setTermsOpen: PropTypes.func.isRequired,
+  setPrivacyOpen: PropTypes.func.isRequired,
 };
 
 export default Footer;

@@ -1,9 +1,12 @@
 import {useState} from "react";
 import {useForm} from "react-hook-form";
 import {TextField, Button, Box, Typography, CircularProgress} from "@mui/material";
+import {useAuthStore} from "../src/store/useAuthStore.js";
 
-const AuthForm = ({closeAuth, openForgotPassword, onLogin, onRegister}) => {
+
+const AuthForm = ({openForgotPassword, onLogin, onRegister}) => {
     const [isRegister, setIsRegister] = useState(false);
+    const { setAuthStage } = useAuthStore();
     const [loading, setLoading] = useState(false);
     const {
         handleSubmit,
@@ -111,8 +114,18 @@ const AuthForm = ({closeAuth, openForgotPassword, onLogin, onRegister}) => {
                 {loading ? <CircularProgress size={24}/> : isRegister ? "Register" : "Login"}
             </Button>
 
-            <Button fullWidth sx={{mt: 1}} onClick={() => setIsRegister(!isRegister)}>
-                {isRegister ? "Already have an account? Login" : "Don't have an account? Register"}
+            <Button fullWidth sx={{mt: 1}} onClick={() => {
+                if (!isRegister) {
+                    setAuthStage("register");
+                } else {
+                    setAuthStage("sign in");
+                }
+                setIsRegister(!isRegister);
+            }}
+            >
+                {isRegister
+                    ? "Already have an account? Login"
+                    : "Don't have an account? Register"}
             </Button>
 
             {/* Forgot Password Link */}

@@ -8,9 +8,8 @@ import {
     DialogActions,
     DialogContent,
     Dialog,
-    DialogTitle,
     Snackbar,
-    Alert, FormControlLabel, Switch, Divider,
+    Alert, Switch, Divider, DialogTitle,
 } from '@mui/material';
 import Sidebar from '../Components/Sidebar.jsx';
 import MapView from '../Components/Mapview.jsx';
@@ -26,6 +25,7 @@ import {SNACKBAR_MESSAGES, SNACKBAR_SEVERITIES} from '../constants/snackbarMessa
 import ReusableModal from "../Components/ReusableModal.jsx";
 import TermsModal from "../Components/TermsModal.jsx";
 import PrivacyModal from "../Components/PrivacyModal.jsx";
+import VerifyEmail from "../Components/VerifyEmailPage.jsx";
 
 function App() {
     // Map and Dashboard state
@@ -37,7 +37,7 @@ function App() {
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
     const logout = useAuthStore((state) => state.logout);
     const setCsrfToken = useAuthStore(state => state.setCsrfToken);
-    const {login, register} = useAuthStore();
+    const {login, register, authStage, setAuthStage} = useAuthStore();
 
     // Modals State
     const [aboutOpen, setAboutOpen] = useState(false);
@@ -65,7 +65,7 @@ function App() {
             showSnackbar(SNACKBAR_MESSAGES.LOGIN_SUCCESS, SNACKBAR_SEVERITIES.SUCCESS);
             setAuthOpen(false);
         } else {
-            showSnackbar(response.message || SNACKBAR_MESSAGES.LOGIN_FAILURE, SNACKBAR_SEVERITIES.ERROR);
+            showSnackbar(response.errors[0].message || SNACKBAR_MESSAGES.LOGIN_FAILURE, SNACKBAR_SEVERITIES.ERROR);
         }
     };
 
@@ -89,15 +89,18 @@ function App() {
 
         const response = await register(userData);
 
-        if (response.success) {
-            showSnackbar(SNACKBAR_MESSAGES.REGISTER_SUCCESS, SNACKBAR_SEVERITIES.SUCCESS);
-            setAuthOpen(false);
+        if (response.verification_pending) {
+            showSnackbar(response.message, SNACKBAR_SEVERITIES.INFO);
+            setAuthStage("verify-email");
+            setTimeout(() => {
+                setAuthOpen(false);
+            }, 2000);
+        } else if (response.errors && response.errors.length > 0) {
+            showSnackbar(`Registration Failed: ${response.errors[0].message}`, SNACKBAR_SEVERITIES.ERROR);
         } else {
             showSnackbar(SNACKBAR_MESSAGES.REGISTER_FAILURE, SNACKBAR_SEVERITIES.ERROR);
         }
     };
-
-
     return (
         <Box sx={{display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden'}}>
             {/* Navbar */}
@@ -154,7 +157,13 @@ function App() {
             {/* Main Content */}
             <Box sx={{display: 'flex', flex: 1, position: 'relative', overflow: 'hidden'}}>
                 <Sidebar setMapCenter={setMapCenter}/>
-                <Box sx={{flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'auto'}}>
+                <Box sx={{
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    position: 'relative',
+                    overflow: 'auto'
+                }}>
                     {currentView === 'map' && (
                         <>
                             <MapView/>
@@ -182,15 +191,18 @@ function App() {
 
             {/* Sign-In Modal */}
             <Dialog open={authOpen} onClose={() => setAuthOpen(false)}>
-                <DialogTitle>Sign in</DialogTitle>
+                <DialogTitle>
+                    {authStage === 'register' ? 'Register' : 'Sign in'}
+                </DialogTitle>
                 <DialogContent>
-                    <AuthForm closeAuth={() => setAuthOpen(false)}
-                              openForgotPassword={() => {
-                                  setAuthOpen(false);
-                                  setForgotPasswordOpen(true);
-                              }}
-                              onLogin={handleLogin}
-                              onRegister={handleRegister}
+                    <AuthForm
+                        closeAuth={() => setAuthOpen(false)}
+                        openForgotPassword={() => {
+                            setAuthOpen(false);
+                            setForgotPasswordOpen(true);
+                        }}
+                        onLogin={handleLogin}
+                        onRegister={handleRegister}
                     />
                 </DialogContent>
                 <DialogActions>
