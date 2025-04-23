@@ -28,7 +28,7 @@ function BoundsUpdater() {
 
   useEffect(() => {
     if (bounds) {
-      map.fitBounds(bounds)
+        map.fitBounds(bounds)
     }
   }, [map, bounds])
 
