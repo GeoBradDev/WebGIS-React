@@ -23,6 +23,9 @@ const useStore = create((set) => ({
 
     geojsonData: null,
     isDataLoaded: false,
+    bounds: null,
+    setBounds: (bounds) => set({bounds}),
+
     fetchGeoJSONData: async () => {
         try {
             const response = await fetch(

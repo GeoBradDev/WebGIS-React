@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import { Typography, TextField, Button, Paper, Box, IconButton } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+import useStore from '../src/store/useStore';
+import {bounds} from "leaflet/src/geometry/index.js";
 
 function Sidebar({ setMapCenter }) {
     const [searchText, setSearchText] = useState('');
     const [isCollapsed, setIsCollapsed] = useState(false); // State to manage collapse
+    const setBounds = useStore(state => state.setBounds);
+
 
     const handleFormSubmit = (event) => {
         event.preventDefault();
@@ -23,6 +27,9 @@ function Sidebar({ setMapCenter }) {
             if (results.length > 0) {
                 const { lat, lon } = results[0];
                 setMapCenter([parseFloat(lat), parseFloat(lon)]);
+                const {boundingbox} = results[0]
+                const [south, north, west, east] = boundingbox.map(parseFloat)
+                setBounds([[south, west], [north, east]])
             } else {
                 alert('Location not found.');
             }
