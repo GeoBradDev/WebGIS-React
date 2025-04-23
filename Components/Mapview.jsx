@@ -22,6 +22,19 @@ const gpsLocationIcon = L.divIcon({
     html: `<div class="gps-marker"></div>`,
 });
 
+function BoundsUpdater() {
+  const map = useMap()
+  const bounds = useStore(state => state.bounds)
+
+  useEffect(() => {
+    if (bounds) {
+        map.fitBounds(bounds)
+    }
+  }, [map, bounds])
+
+  return null
+}
+
 function HomeButton() {
     const map = useMap();
     const defaultCenter = useStore((state) => state.defaultCenter);
@@ -138,6 +151,7 @@ function MapView() {
                 <HomeButton />
                 <GpsButton />
                 <MapUpdater />
+                <BoundsUpdater/>
                 {userLocation && (
                     <Marker key={userLocation.toString()} position={userLocation} icon={gpsLocationIcon} />
                 )}
