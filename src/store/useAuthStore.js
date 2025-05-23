@@ -1,7 +1,7 @@
 import {create} from 'zustand';
 import {persist, createJSONStorage} from 'zustand/middleware';
 
-const allAuthEndpoint = 'http://localhost:8000/_allauth/app/v1/auth';
+const allAuthEndpoint = 'https://webgis-django.onrender.com/_allauth/app/v1/auth';
 
 export const useAuthStore = create(
         persist(
