@@ -1,113 +1,166 @@
-# WebGIS Template Starter Project
+# WebGIS-React 🗺️
 
-## Overview
-This is a starter WebGIS project built with **React**. The project is designed to serve as a universal frontend template for WebGIS and web mapping applications. It provides a foundational structure for creating interactive mapping applications, complete with a sidebar for tools/forms and an interactive map powered by **Leaflet**.
-
----
-
-## Features
-- **Interactive Map**: An interactive map using React Leaflet with support for layers, markers, and popups.
-- **Sidebar**: A collapsible sidebar designed for forms, filters, and tools.
-- **Search Functionality**: Search for locations with reverse geocoding using OpenStreetMap's Nominatim API.
-- **Material UI**: Clean and responsive UI components for the sidebar, navbar, and overall layout.
-- **Dynamic Map View**: Map automatically pans and zooms to searched locations.
+A universal frontend template for modern **WebGIS** and **interactive web mapping** applications. Built with **React**, **React Leaflet**, and **Material UI**, this project integrates seamlessly with the [WebGIS-Django backend](https://github.com/GeoBradDev/WebGIS-Django) to power full-stack spatial web apps.
 
 ---
 
-## Tech Stack
-- **React**: Frontend framework for building user interfaces.
-- **React Leaflet**: For rendering and interacting with maps.
-- **Material UI**: UI library for responsive and modern components.
-- **OpenStreetMap Nominatim API**: For geocoding search functionality.
+## 🚀 Get Started the Easy Way
+
+We recommend using the `bootstrap.sh` setup script from the backend project to automatically install and configure both frontend and backend services, including PostgreSQL/PostGIS and Django:
+
+```bash
+bash <(curl -s https://raw.githubusercontent.com/GeoBradDev/WebGIS-Django/main/scripts/bootstrap.sh)
+````
+
+This script will:
+
+* Clone both frontend and backend repos
+* Install required system packages and dependencies
+* Create a PostGIS-enabled PostgreSQL database
+* Set up environment variables and virtualenv
+* Launch both frontend and backend development servers
 
 ---
 
-## Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/stricherz13/WebGIS-React.git
-   ```
+## 🌟 Features
 
-2. Navigate to the project directory:
-   ```bash
-   cd WebGIS-React
-   ```
-
-3. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-4. Start the development server:
-   ```bash
-   npm start
-   ```
-
-5. Open the application in your browser:
-   ```
-   http://localhost:5173
-   ```
+* 🗺️ **Interactive Map** – Built with React Leaflet, supports layers, markers, and popups
+* 📍 **Search + Reverse Geocoding** – Location search with Nominatim API integration
+* 🧭 **Collapsible Sidebar** – For tools, forms, filters, and future extensions
+* 🖌️ **Material UI** – Clean, responsive, and accessible interface
+* 🔄 **Dynamic View** – Auto-pans and zooms to searched locations
 
 ---
 
-## Project Structure
+## 🛠️ Tech Stack
+
+| Technology        | Purpose                       |
+| ----------------- | ----------------------------- |
+| **React**         | Core frontend framework       |
+| **React Leaflet** | Map rendering and interaction |
+| **Material UI**   | UI components and layout      |
+| **Nominatim API** | Location search and geocoding |
+
+---
+
+## ⚡ Manual Setup
+
+### Prerequisites
+
+* Node.js (v16+ recommended)
+* npm
+
+### Installation
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/GeoBradDev/WebGIS-React.git
+
+# 2. Navigate to project directory
+cd WebGIS-React
+
+# 3. Install dependencies
+npm install
+
+# 4. Start the development server
+npm run dev
 ```
-project/
-├── public/             # Static assets (e.g., favicon, map icon, etc.)
-├── src/                # Source code
-│   ├── components/     # Reusable components (e.g., Sidebar, MapView)
-│   ├── App.js          # Main application file
-│   └── index.js        # Entry point
+
+> The app will be available at: [http://localhost:5173](http://localhost:5173)
+
+---
+
+## 📁 Project Structure
+
+```
+WebGIS-React/
+├── public/             # Static assets (favicon, icons)
+├── src/
+│   ├── components/     # Reusable UI and map components
+│   ├── hooks/          # Custom hooks (e.g., useGeocoder)
+│   ├── App.js          # Main application shell
+│   └── main.js         # React/Vite entry point
+├── .env                # Environment config (optional)
 ├── package.json        # Project dependencies and scripts
 └── README.md           # Project documentation
 ```
 
 ---
 
-## Usage
-### Interactive Map
-- Pan and zoom to explore the map.
-- Add custom markers or layers by extending the `MapView` component.
+## 🧪 Usage
+
+### MapView Component
+
+* Extend the map with custom layers, GeoJSON, and Leaflet plugins
+* Customize markers, tooltips, popups, and basemaps
 
 ### Sidebar
-- Use the provided form for tool integration.
-- Add additional controls, filters, or forms as needed.
 
-### Search Functionality
-- Enter a location name in the search bar.
-- The map automatically pans to the corresponding coordinates.
+* Add tools, forms, filters, or content panels
+* Easily repositioned or replaced using Material UI `Drawer`
+
+### Search
+
+* Type a location in the search bar
+* The map will pan to the selected location using OpenStreetMap data
 
 ---
 
-## Customization
-### Update the Favicon
-To replace the favicon with your own:
-1. Add your favicon file (e.g., `map-icon.svg`) to the `public/` directory.
-2. Update the `<link>` tag in `public/index.html`:
+## 🛠 Customization
+
+### Favicon
+
+1. Add your icon (e.g., `map-icon.svg`) to `public/`
+2. Update `public/index.html`:
+
    ```html
    <link rel="icon" type="image/svg+xml" href="/map-icon.svg" />
    ```
 
-### Add More Features
-- Use React Leaflet plugins for advanced mapping functionality (e.g., heatmaps, drawing tools).
-- Integrate APIs like Google Maps, Mapbox, or Esri for additional geospatial data.
-- Add state management (e.g., Redux, Zustand) for complex interactions.
+### Environment Variables
+
+Create a `.env` file if needed:
+
+```env
+VITE_API_URL=http://localhost:8000/api
+```
+
+Use `import.meta.env.VITE_API_URL` inside your components to access it.
+
+### Feature Ideas
+
+* 🔥 Add heatmap or clustering support
+* 🧭 Integrate routing or distance calculations
+* 🌐 Add multilingual support
+* 🗂️ Connect to REST APIs or WebGIS layers
 
 ---
 
-## Contributing
-Contributions are welcome! If you find a bug or have a feature request, please open an issue or submit a pull request.
+## 🔗 Backend Integration
+
+This frontend is designed to pair with:
+
+👉 **[WebGIS-Django Backend](https://github.com/GeoBradDev/WebGIS-Django)** – Includes Django Ninja, Django Allauth (headless), and PostGIS support
 
 ---
 
-## License
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+## 🤝 Contributing
+
+Contributions are welcome!
+Please open an issue for bugs or feature requests, or submit a pull request directly.
 
 ---
 
-## Acknowledgments
-- [React](https://reactjs.org/)
-- [Leaflet](https://leafletjs.com/)
-- [Material UI](https://mui.com/)
-- [OpenStreetMap](https://www.openstreetmap.org/)
+## 📄 License
+
+MIT © [GeoBrad.dev](https://geobrad.dev)
+
+---
+
+## 🙏 Acknowledgments
+
+* [React](https://reactjs.org/)
+* [Leaflet](https://leafletjs.com/)
+* [Material UI](https://mui.com/)
+* [OpenStreetMap / Nominatim](https://nominatim.openstreetmap.org/)
 
