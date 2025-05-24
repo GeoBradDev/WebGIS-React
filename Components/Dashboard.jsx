@@ -44,8 +44,8 @@ const Dashboard = ({ data }) => {
                 </BarChart>
             </ResponsiveContainer>
 
-            <Grid container spacing={2} sx={{ mt: 2 }}>
-                <Grid item xs={12} md={6}>
+            <Grid container columns={12} spacing={2} sx={{ mt: 2 }}>
+                <Grid gridColumn="span 12" md={6}>
                     <Typography variant="h6">Municipality Size Distribution</Typography>
                     <ResponsiveContainer width="100%" height={300}>
                         <PieChart>
@@ -59,7 +59,7 @@ const Dashboard = ({ data }) => {
                     </ResponsiveContainer>
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid gridColumn="span 12">
                     <Typography variant="h6">Top 5 Largest Municipalities</Typography>
                     <ResponsiveContainer width="100%" height={300}>
                         <BarChart data={[...rows].sort((a, b) => b.SQ_MILES - a.SQ_MILES).slice(0,5)}>

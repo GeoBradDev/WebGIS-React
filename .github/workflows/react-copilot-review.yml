@@ -4,7 +4,7 @@ on:
   pull_request:
     branches:
       - main
-      - dev
+      - Deploy
 
 jobs:
   copilot-review:
@@ -22,7 +22,10 @@ jobs:
         run: npm ci
 
       - name: Install GitHub Copilot CLI
-        run: npm install -g @githubnext/github-copilot-cli
+        run: |
+          npm install -g @githubnext/github-copilot-cli
+          # Add the global npm bin directory to the PATH so we can call 'copilot'
+          echo "PATH=$(npm bin -g):$PATH" >> $GITHUB_ENV
 
       - name: Authenticate GitHub CLI
         env:
@@ -31,7 +34,6 @@ jobs:
 
       - name: Run GitHub Copilot Code Review
         run: copilot review .
-        continue-on-error: true  # Ensures workflow doesn't fail if Copilot can't review
 
       - name: Post Copilot Review Comments
         uses: actions/github-script@v6
