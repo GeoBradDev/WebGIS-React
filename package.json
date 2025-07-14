@@ -11,9 +11,7 @@
     "type-check": "tsc --noEmit",
     "test": "jest",
     "prettier": "prettier .",
-    "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",
