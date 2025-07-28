@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Typography, TextField, Button, Paper, Box, IconButton, Checkbox, FormControlLabel, Divider } from '@mui/material';
-import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+import { Typography, TextField, Button, Paper, Box, IconButton, Checkbox, FormControlLabel, Divider, InputAdornment } from '@mui/material';
+import { ChevronLeft, ChevronRight, Clear } from '@mui/icons-material';
 import PropTypes from 'prop-types';
 import useStore from '../src/store/useStore';
 
@@ -38,6 +38,10 @@ function Sidebar({ setMapCenter }) {
         } catch (error) {
             console.error('Error fetching location:', error);
         }
+    };
+
+    const handleClearSearch = () => {
+        setSearchText('');
     };
 
     return (
@@ -79,6 +83,22 @@ function Sidebar({ setMapCenter }) {
                                     value={searchText}
                                     onChange={(e) => setSearchText(e.target.value)}
                                     sx={{ marginBottom: 1 }}
+                                    slotProps={{
+                                        input: {
+                                            endAdornment: searchText && (
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        onClick={handleClearSearch}
+                                                        edge="end"
+                                                        size="small"
+                                                        aria-label="clear search"
+                                                    >
+                                                        <Clear />
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            ),
+                                        },
+                                    }}
                                 />
                                 <Button
                                     type="submit" // Set the button type to "submit"
