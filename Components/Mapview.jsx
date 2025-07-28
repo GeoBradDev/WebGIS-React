@@ -131,6 +131,8 @@ function MapView() {
     const isDataLoaded = useStore((state) => state.isDataLoaded);
     const fetchGeoJSONData = useStore((state) => state.fetchGeoJSONData);
     const layers = useStore((state) => state.layers);
+    const getFilteredGeoJSONData = useStore((state) => state.getFilteredGeoJSONData);
+    const filters = useStore((state) => state.filters);
 
     // Fetch GeoJSON data on mount
     useEffect(() => {
@@ -155,8 +157,8 @@ function MapView() {
                 {/* Conditional GeoJSON Layers based on visibility */}
                 {layers['st-louis-municipalities']?.visible && layers['st-louis-municipalities']?.data && (
                     <GeoJSON 
-                        key="st-louis-municipalities"
-                        data={layers['st-louis-municipalities'].data} 
+                        key={`st-louis-municipalities-${JSON.stringify(filters)}`}
+                        data={getFilteredGeoJSONData()} 
                         style={{ color: 'blue', weight: 2, fillOpacity: 0.1 }} 
                     />
                 )}
