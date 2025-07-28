@@ -126,7 +126,22 @@ function Sidebar({ setMapCenter }) {
                                             size="small"
                                         />
                                     }
-                                    label={layer.name}
+                                    label={
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                            <span>{layer.name}</span>
+                                            {layer.id === 'st-louis-municipalities' && (
+                                                <Box
+                                                    sx={{
+                                                        width: 50,
+                                                        height: 25,
+                                                        backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                                                        border: '2px solid blue',
+                                                        borderRadius: 0.5,
+                                                    }}
+                                                />
+                                            )}
+                                        </Box>
+                                    }
                                     sx={{ 
                                         display: 'flex', 
                                         width: '100%',
