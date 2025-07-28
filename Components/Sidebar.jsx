@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Typography, TextField, Button, Paper, Box, IconButton, Checkbox, FormControlLabel } from '@mui/material';
+import { Typography, TextField, Button, Paper, Box, IconButton, Checkbox, FormControlLabel, Divider } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import PropTypes from 'prop-types';
 import useStore from '../src/store/useStore';
@@ -91,8 +91,10 @@ function Sidebar({ setMapCenter }) {
                             </Box>
                         </Box>
                         
+                        <Divider sx={{ marginY: 2 }} />
+                        
                         {/* Layer Control Section */}
-                        <Box sx={{ marginTop: 3, marginBottom: 2 }}>
+                        <Box sx={{ marginBottom: 2 }}>
                             <Typography variant="h6" sx={{ marginBottom: 2 }}>Map Layers</Typography>
                             {Object.values(layers).map((layer) => (
                                 <FormControlLabel
@@ -113,6 +115,8 @@ function Sidebar({ setMapCenter }) {
                                 />
                             ))}
                         </Box>
+                        
+                        <Divider sx={{ marginY: 2 }} />
                         
                         <Typography variant="h6">Query Data</Typography>
                         <Box
