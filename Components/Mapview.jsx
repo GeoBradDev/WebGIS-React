@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import {
     MapContainer,
     TileLayer,
@@ -119,7 +119,7 @@ function MapUpdater() {
         if (mapCenter) {
             map.setView(mapCenter); // Update the map view dynamically
         }
-    }, [mapCenter]);
+    }, [mapCenter, map]);
 
     return null;
 }
@@ -127,19 +127,15 @@ function MapUpdater() {
 function MapView() {
     const { BaseLayer } = LayersControl;
     const mapCenter = useStore((state) => state.mapCenter);
-    const geojsonData = useStore((state) => state.geojsonData);
     const userLocation = useStore((state) => state.userLocation);
     const isDataLoaded = useStore((state) => state.isDataLoaded);
-    const fetchGeoJSONData = useStore((state) => state.fetchGeoJSONData);;
+    const fetchGeoJSONData = useStore((state) => state.fetchGeoJSONData);
+    const layers = useStore((state) => state.layers);
 
     // Fetch GeoJSON data on mount
     useEffect(() => {
         fetchGeoJSONData();
     }, [fetchGeoJSONData]);
-
-
-    useEffect(() => {
-          }, [userLocation]);
 
     return (
         <Box sx={{ flex: 1, position: 'relative' }}>
@@ -155,8 +151,15 @@ function MapView() {
                 {userLocation && (
                     <Marker key={userLocation.toString()} position={userLocation} icon={gpsLocationIcon} />
                 )}
-                {/* GeoJSON Layer */}
-                {geojsonData && <GeoJSON data={geojsonData} style={{ color: 'blue' }} />}
+                
+                {/* Conditional GeoJSON Layers based on visibility */}
+                {layers['st-louis-municipalities']?.visible && layers['st-louis-municipalities']?.data && (
+                    <GeoJSON 
+                        key="st-louis-municipalities"
+                        data={layers['st-louis-municipalities'].data} 
+                        style={{ color: 'blue', weight: 2, fillOpacity: 0.1 }} 
+                    />
+                )}
                 {/* Layers Control */}
                 <LayersControl
                     style={{

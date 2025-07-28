@@ -1,13 +1,15 @@
 import { useState } from 'react';
-import { Typography, TextField, Button, Paper, Box, IconButton } from '@mui/material';
-import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+import { Typography, TextField, Button, Paper, Box, IconButton, Checkbox, FormControlLabel, Divider, InputAdornment } from '@mui/material';
+import { ChevronLeft, ChevronRight, Clear } from '@mui/icons-material';
+import PropTypes from 'prop-types';
 import useStore from '../src/store/useStore';
-import {bounds} from "leaflet/src/geometry/index.js";
 
 function Sidebar({ setMapCenter }) {
     const [searchText, setSearchText] = useState('');
     const [isCollapsed, setIsCollapsed] = useState(false); // State to manage collapse
     const setBounds = useStore(state => state.setBounds);
+    const layers = useStore(state => state.layers);
+    const toggleLayerVisibility = useStore(state => state.toggleLayerVisibility);
 
 
     const handleFormSubmit = (event) => {
@@ -36,6 +38,10 @@ function Sidebar({ setMapCenter }) {
         } catch (error) {
             console.error('Error fetching location:', error);
         }
+    };
+
+    const handleClearSearch = () => {
+        setSearchText('');
     };
 
     return (
@@ -77,6 +83,22 @@ function Sidebar({ setMapCenter }) {
                                     value={searchText}
                                     onChange={(e) => setSearchText(e.target.value)}
                                     sx={{ marginBottom: 1 }}
+                                    slotProps={{
+                                        input: {
+                                            endAdornment: searchText && (
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        onClick={handleClearSearch}
+                                                        edge="end"
+                                                        size="small"
+                                                        aria-label="clear search"
+                                                    >
+                                                        <Clear />
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            ),
+                                        },
+                                    }}
                                 />
                                 <Button
                                     type="submit" // Set the button type to "submit"
@@ -88,6 +110,49 @@ function Sidebar({ setMapCenter }) {
                                 </Button>
                             </Box>
                         </Box>
+                        
+                        <Divider sx={{ marginY: 2 }} />
+                        
+                        {/* Layer Control Section */}
+                        <Box sx={{ marginBottom: 2 }}>
+                            <Typography variant="h6" sx={{ marginBottom: 2 }}>Map Layers</Typography>
+                            {Object.values(layers).map((layer) => (
+                                <FormControlLabel
+                                    key={layer.id}
+                                    control={
+                                        <Checkbox
+                                            checked={layer.visible}
+                                            onChange={() => toggleLayerVisibility(layer.id)}
+                                            size="small"
+                                        />
+                                    }
+                                    label={
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                            <span>{layer.name}</span>
+                                            {layer.id === 'st-louis-municipalities' && (
+                                                <Box
+                                                    sx={{
+                                                        width: 50,
+                                                        height: 25,
+                                                        backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                                                        border: '2px solid blue',
+                                                        borderRadius: 0.5,
+                                                    }}
+                                                />
+                                            )}
+                                        </Box>
+                                    }
+                                    sx={{ 
+                                        display: 'flex', 
+                                        width: '100%',
+                                        marginBottom: 0.5 
+                                    }}
+                                />
+                            ))}
+                        </Box>
+                        
+                        <Divider sx={{ marginY: 2 }} />
+                        
                         <Typography variant="h6">Query Data</Typography>
                         <Box
                             component="form"
@@ -109,5 +174,9 @@ function Sidebar({ setMapCenter }) {
         </Box>
     );
 }
+
+Sidebar.propTypes = {
+    setMapCenter: PropTypes.func.isRequired,
+};
 
 export default Sidebar;
