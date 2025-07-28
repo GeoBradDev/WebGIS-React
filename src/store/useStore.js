@@ -26,16 +26,43 @@ const useStore = create((set) => ({
     bounds: null,
     setBounds: (bounds) => set({bounds}),
 
+    // Layer visibility state
+    layers: {
+        'st-louis-municipalities': {
+            id: 'st-louis-municipalities',
+            name: 'St. Louis Municipalities',
+            visible: true,
+            data: null,
+        }
+    },
+    
+    toggleLayerVisibility: (layerId) => set((state) => ({
+        layers: {
+            ...state.layers,
+            [layerId]: {
+                ...state.layers[layerId],
+                visible: !state.layers[layerId].visible,
+            }
+        }
+    })),
+
     fetchGeoJSONData: async () => {
         try {
             const response = await fetch(
                 'https://services2.arcgis.com/w657bnjzrjguNyOy/ArcGIS/rest/services/Municipal_Boundaries_Line/FeatureServer/1/query?where=1%3D1&outFields=*&f=geojson'
             );
             const data = await response.json();
-            set({
+            set((state) => ({
                 geojsonData: data,
                 isDataLoaded: data?.features?.length > 0,
-            });
+                layers: {
+                    ...state.layers,
+                    'st-louis-municipalities': {
+                        ...state.layers['st-louis-municipalities'],
+                        data: data,
+                    }
+                }
+            }));
         } catch (error) {
             console.error('Error fetching GeoJSON data:', error);
             set({geojsonData: null, isDataLoaded: false});

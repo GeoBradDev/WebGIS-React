@@ -4,7 +4,7 @@ import {useForm} from "react-hook-form";
 import {TextField, Button, Box, Typography} from "@mui/material";
 import PropTypes from "prop-types";
 
-const allAuthEndpoint = 'https://webgis-django.onrender.com/_allauth/app/v1/auth';
+const allAuthEndpoint = 'http://localhost:8000/_allauth/app/v1/auth';
 
 const ForgotPasswordForm = ({onClose}) => {
     const {register, handleSubmit, formState: {errors}} = useForm();

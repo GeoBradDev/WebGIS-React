@@ -1,13 +1,15 @@
 import { useState } from 'react';
-import { Typography, TextField, Button, Paper, Box, IconButton } from '@mui/material';
+import { Typography, TextField, Button, Paper, Box, IconButton, Checkbox, FormControlLabel } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+import PropTypes from 'prop-types';
 import useStore from '../src/store/useStore';
-import {bounds} from "leaflet/src/geometry/index.js";
 
 function Sidebar({ setMapCenter }) {
     const [searchText, setSearchText] = useState('');
     const [isCollapsed, setIsCollapsed] = useState(false); // State to manage collapse
     const setBounds = useStore(state => state.setBounds);
+    const layers = useStore(state => state.layers);
+    const toggleLayerVisibility = useStore(state => state.toggleLayerVisibility);
 
 
     const handleFormSubmit = (event) => {
@@ -88,6 +90,30 @@ function Sidebar({ setMapCenter }) {
                                 </Button>
                             </Box>
                         </Box>
+                        
+                        {/* Layer Control Section */}
+                        <Box sx={{ marginTop: 3, marginBottom: 2 }}>
+                            <Typography variant="h6" sx={{ marginBottom: 2 }}>Map Layers</Typography>
+                            {Object.values(layers).map((layer) => (
+                                <FormControlLabel
+                                    key={layer.id}
+                                    control={
+                                        <Checkbox
+                                            checked={layer.visible}
+                                            onChange={() => toggleLayerVisibility(layer.id)}
+                                            size="small"
+                                        />
+                                    }
+                                    label={layer.name}
+                                    sx={{ 
+                                        display: 'flex', 
+                                        width: '100%',
+                                        marginBottom: 0.5 
+                                    }}
+                                />
+                            ))}
+                        </Box>
+                        
                         <Typography variant="h6">Query Data</Typography>
                         <Box
                             component="form"
@@ -109,5 +135,9 @@ function Sidebar({ setMapCenter }) {
         </Box>
     );
 }
+
+Sidebar.propTypes = {
+    setMapCenter: PropTypes.func.isRequired,
+};
 
 export default Sidebar;
