@@ -109,6 +109,9 @@ const useStore = create((set, get) => ({
             
             // Filter by area range
             const area = props.SQ_MILES;
+            if (!Number.isFinite(area)) {
+                return false; // Skip features with invalid area values
+            }
             if (filters.areaMin && area < parseFloat(filters.areaMin)) {
                 return false;
             }
