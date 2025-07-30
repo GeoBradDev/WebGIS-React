@@ -131,11 +131,27 @@ function MapView() {
     const isDataLoaded = useStore((state) => state.isDataLoaded);
     const fetchGeoJSONData = useStore((state) => state.fetchGeoJSONData);
     const layers = useStore((state) => state.layers);
+    const getFilteredGeoJSONData = useStore((state) => state.getFilteredGeoJSONData);
+    const filters = useStore((state) => state.filters);
 
     // Fetch GeoJSON data on mount
     useEffect(() => {
         fetchGeoJSONData();
     }, [fetchGeoJSONData]);
+
+    const onEachFeature = (feature, layer) => {
+        if (feature.properties) {
+            const { MUNICIPALITY, MUNICODE, SQ_MILES } = feature.properties;
+            const popupContent = `
+                <div style="font-family: Arial, sans-serif;">
+                    <h4 style="margin: 0 0 8px 0; color: #1976d2;">${MUNICIPALITY || 'N/A'}</h4>
+                    <p style="margin: 4px 0;"><strong>Code:</strong> ${MUNICODE || 'N/A'}</p>
+                    <p style="margin: 4px 0;"><strong>Square Miles:</strong> ${SQ_MILES ? Number(SQ_MILES).toFixed(2) : 'N/A'}</p>
+                </div>
+            `;
+            layer.bindPopup(popupContent);
+        }
+    };
 
     return (
         <Box sx={{ flex: 1, position: 'relative' }}>
@@ -155,9 +171,10 @@ function MapView() {
                 {/* Conditional GeoJSON Layers based on visibility */}
                 {layers['st-louis-municipalities']?.visible && layers['st-louis-municipalities']?.data && (
                     <GeoJSON 
-                        key="st-louis-municipalities"
-                        data={layers['st-louis-municipalities'].data} 
+                        key={`st-louis-municipalities-${JSON.stringify(filters)}`}
+                        data={getFilteredGeoJSONData()} 
                         style={{ color: 'blue', weight: 2, fillOpacity: 0.1 }} 
+                        onEachFeature={onEachFeature}
                     />
                 )}
                 {/* Layers Control */}
